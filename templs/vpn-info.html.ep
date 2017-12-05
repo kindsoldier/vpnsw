@@ -1,0 +1,106 @@
+%#
+%# $Id$
+%#
+% layout 'default';
+% title 'VPN Sw';
+% use Mojo::Util qw(dumper);
+% use File::Basename;
+% use File::stat;
+% use POSIX;
+
+% my $req = $c->req;
+% my $confdir = $self->app->config('confdir');
+% my $vpn = $self->app->vpn;
+
+<div class="text-center">
+    <h5>network summary <a href="/vpn/info"><i class="fi-refresh""></i></a></h5>
+</div>
+
+% my $conf_list = $vpn->conf_list($confdir);
+
+<table id="table" class="table-scroll hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>cn</th>
+            <th>public</th>
+            <th>service</th>
+            <th>stat</th>
+            <th>vpn net</th>
+            <th>tun addr</th>
+            <th>off addr</th>
+            <th>wrk addr</th>
+        </tr>
+    </thead>
+    <tbody>
+% my $num = 1;
+% foreach my $conffile (sort @{$conf_list}) {
+
+    % my $name = $vpn->conf_basename($conffile);
+    % my $conf = $vpn->conf_parse($conffile);
+
+    % my $server_net = $conf->{'server'} || '';
+
+    % my $statfile = $conf->{'status'} || '';
+    % my $stat = $vpn->stat_parse($statfile) || undef;
+    % my $conn = scalar keys %{$stat};
+
+    % my $netcount = 0;
+    % foreach my $cn (keys %{$stat}) {
+        % $netcount++ if $stat->{$cn}{'net'}
+    % }
+
+    % my $status = $vpn->service_status($name) || '';
+
+    % foreach my $cn (sort keys %{$stat}) {
+        % my $ipaddr = $stat->{$cn}{'ipaddr'} || '';
+        % my $date = $stat->{$cn}{'date'} || '';
+        % my $peer = $stat->{$cn}{'local'} || '';
+        % my $nets = $stat->{$cn}{'net'} || undef ;
+        % my $netstr;
+        % foreach my $net (@{$nets}) {
+            % $netstr .= "$net ";
+        % }
+        %  $netstr ||= 'ws/nat';
+
+        % my $wclients = $stat->{$cn}{'wclient'} || () ;
+        % my $wcstr = '';
+        % foreach my $wc (@{$wclients}) {
+            % $wcstr .= "$wc ";
+        % }
+        <tr>
+            <td><%= $num %></td>
+            <td><%= $cn %></td>
+            <td><%= $ipaddr %></td>
+            <td><%= $name %></td> 
+            <td><%= $status %></td>
+            <td><%= $vpn->pack_ipaddr($server_net) if $server_net %></td>
+            <td><%= $peer %></td>
+            <td><%= $netstr %></td>
+            <td><%= $wcstr %></td>
+        </tr>
+        % $num++;
+    % }
+% };
+</table>
+
+<script>
+    $.extend(true, $.fn.dataTable.defaults, {
+        "searching": true,
+        "ordering": true,
+        "pageLength": -1,
+        "lengthMenu": [ [10, 25, 50,100, -1], [10, 25, 50,100, "All"] ],
+        "language": {
+            "search": "",
+            "lengthMenu": "_MENU_",
+            "info": "_START_-_END_ of _TOTAL_",
+            "infoEmpty": "",
+        },
+    });
+
+    $(document).ready(function() {
+        $('#table').DataTable();
+    });
+</script>
+%#EOF
+

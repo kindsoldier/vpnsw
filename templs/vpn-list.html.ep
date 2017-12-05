@@ -1,0 +1,258 @@
+%#
+%# $Id$
+%#
+% layout 'default';
+% title 'VPN Sw';
+
+% use Mojo::Util qw(dumper);
+% use File::Basename;
+% use File::stat;
+% use POSIX;
+
+% my $req = $c->req;
+% my $confdir = $self->app->config('confdir');
+% my $vpn = $self->app->vpn;
+
+% my $request = $req->param('request') || '';
+% my $service = $req->param('service') || undef;
+
+% $vpn->service_start($service) if ($request eq 'start' && defined $service);
+% $vpn->service_stop($service) if ($request eq 'stop' && defined $service);
+
+<div class="text-center">
+    <h5>vpn services <a href="/vpn/list"><i class="fi-refresh"></i></a></h5>
+</div> 
+
+% my $conf_list = $vpn->conf_list($confdir);
+
+% foreach my $conffile (sort @{$conf_list}) {
+    % my $name = $vpn->conf_basename($conffile);
+
+    % my $conf = $vpn->conf_parse($conffile);
+    % my $statfile = $conf->{'status'} || '';
+    % my $stat = $vpn->stat_parse($statfile) || undef;
+
+    % my $status = $vpn->service_status($name) || '';
+
+    % my $action = 'stop';
+    % $action = 'start' if $status eq 'down';
+
+%#    <div class="reveal" id="modal-action-<%= $name %>" data-reveal>
+%#        <div class="text-center">
+%#            <h5>Do switch status?</h5>
+%#        </div>
+%#        <form accept-charset="UTF-8" action="/vpn/list" method="get">
+%#            <input type="hidden" name="request" value="<%= $action %>" />
+%#            <input type="hidden" name="service" value="<%= $name %>" />
+%#
+%#            <p class="text-center">
+%#                <button type="submit" class="button alert">Yes, I agree</button>
+%#                <button class="button" data-close="modal-action-<%= $name %>" type="button">No, Escape</button>
+%#            </p>
+%#        </form>
+%#        <button class="close-button" data-close="modal-action-<%= $name %>" type="button">&times;</button>
+%#    </div>
+
+    <div class="reveal large" id="modal-<%= $name %>" data-reveal>
+        <div>
+            <h5  class="text-center">Service <%= $name %> </h5>
+
+    % if ($stat) {
+        % my $subnum = 1;
+            <table class="table-scroll">
+                    <thead>
+                        <tr>
+                            <th>cn</th>
+                            <th>ipaddr</th>
+                            <th>start</th>
+                            <th>peer</th>
+                            <th>remote</th>
+                            <th>wc</th>
+                        </tr>
+                </thead>
+
+        % foreach my $cn (sort keys %{$stat}) {
+            % my $ipaddr = $stat->{$cn}{'ipaddr'} || '';
+            % my $date = $stat->{$cn}{'date'} || '';
+            % my $peer = $stat->{$cn}{'local'} || '';
+            % my $net = $stat->{$cn}{'net'} || 'ws '.$peer ;
+
+            % my $nets = $stat->{$cn}{'net'} || undef ;
+            % my $netstr;
+            %  foreach my $net (@{$nets}) {
+            %          $netstr .= "$net ";
+            % }
+            % $netstr ||= 'ws/nat';
+
+            % my $wclients = $stat->{$cn}{'wclient'} ;
+            % my $wcstr = '';
+            % foreach my $wc (@{$wclients}) {
+            %      $wcstr .= "$wc ";
+            % }
+
+                    <tr>
+                        <td><%= $cn %></td>
+                        <td><%= $ipaddr %></td>
+                        <td><%= $date %></td>
+                        <td><%= $peer %></td>
+                        <td><%= $netstr %></td>
+                        <td><%= $wcstr %></td>
+                    </tr>
+            % $subnum++;
+        % }
+            </table>
+
+    % }
+        </div>
+        <button class="close-button" data-close="modal-<%= $name %>" type="button">&times;</button>
+    </div>
+% }
+
+% my $total_tun = 0;
+% my $total_tun_up = 0;
+% my $total_net = 0;
+% my $total_ws = 0;
+% my $totalConn = 0;
+
+% foreach my $conffile (sort @{$conf_list}) {
+    % my $name = $vpn->conf_basename($conffile);
+    % my $conf = $vpn->conf_parse($conffile);
+
+    % my $server = $conf->{'server'} || '';
+
+    % my $statfile = $conf->{'status'} || '';
+    % my $stat = $vpn->stat_parse($statfile) || undef;
+    % $total_tun = $total_tun + scalar (keys %{$stat});
+
+    % foreach my $cn (keys %{$stat}) {
+        % $total_net++ if $stat->{$cn}{'net'};
+        % $total_ws++ unless $stat->{$cn}{'net'};
+    % }
+
+    % foreach my $cn (keys %{$stat}) {
+        % $total_ws = $total_ws + scalar @{$stat->{$cn}{'wclient'}} if $stat->{$cn}{'wclient'};
+    % }
+
+    % my $status = $vpn->service_status($name) || '';
+    % my $request = 'start';
+    % $request = 'stop' if $status eq 'up'; 
+
+% }
+
+<p class="text-center">
+total tun:<%= $total_tun %> 
+total ws:<%= $total_ws %>
+</p>
+
+
+<table id="table" class="table-scroll" >
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>service</th>
+            <th>status</th>
+            <th>#tun</th>
+            <th>#net</th>
+            <th>#wc</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        % my $num = 1;
+        % foreach my $conffile (sort @{$conf_list}) {
+
+        % my $name = $vpn->conf_basename($conffile);
+        % my $conf = $vpn->conf_parse($conffile);
+        % my $server = $conf->{'server'} || '';
+
+        % my $statfile = $conf->{'status'} || '';
+        % my $stat = $vpn->stat_parse($statfile) || undef;
+        % my $conn = scalar keys %{$stat};
+
+        % my $net_count = 0;
+        % my $wc_count = 0;
+        % foreach my $cn (keys %{$stat}) {
+            % $net_count++ if $stat->{$cn}{'net'};
+            % $wc_count++ unless $stat->{$cn}{'net'};
+        % }
+
+        % foreach my $cn (keys %{$stat}) {
+            % $wc_count = $wc_count + @{$stat->{$cn}{'wclient'}} if $stat->{$cn}{'wclient'};
+        % }
+
+        % my $status = $vpn->service_status($name) || '';
+        % my $request = 'start';
+        % $request = 'stop' if $status eq 'up'; 
+
+        % my $stat_icon = 'fi-x';
+        % $stat_icon = 'fi-play' if $status eq 'up';
+
+        % my $stat_color = 'alert';
+        % $stat_color = 'success' if $status eq 'up';
+        <tr>
+            <td><%= $num %></td>
+            <td><%= $name %></td> 
+            <td><a id="status_<%= $name %>"><%= $status %> <i class="<%= $stat_icon %>"></i></a></td>
+            <td><a href="#" data-open="modal-<%= $name %>"><%= $conn if $conn %></a></td>
+            <td><%= $net_count if $net_count %></td>
+            <td><%= $wc_count if $wc_count %></td>
+        </tr>
+        % $num++;
+% }
+</table>
+
+% foreach my $conffile (sort @{$conf_list}) {
+    % my $name = $vpn->conf_basename($conffile);
+    % my $status = $vpn->service_status($name) || '';
+
+    <script>
+        var status_<%= $name %> = "<%= $status %>";
+
+        $("#status_<%= $name %>").click(function() {
+            if (status_<%= $name %> == 'down') {
+                $.ajax({
+                    dataType: 'json',
+                    url: '/j/vpn/start?service=<%= $name %>',
+                    success: function(data) {
+                        if (data.status == 'up') {
+                            $("#status_<%= $name %>").html('up <i class="fi-play"></i>');
+                            status_<%= $name %> = 'up';
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    dataType: 'json',
+                    url: '/j/vpn/stop?service=<%= $name %>',
+                    success: function(data) {
+                        if (data.status == 'down') {
+                            $("#status_<%= $name %>").html('down <i class="fi-x"></i>');
+                            status_<%= $name %> = 'down';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+% }
+
+<script>
+    $.extend(true, $.fn.dataTable.defaults, {
+        "searching": true,
+        "ordering": true,
+        "pageLength": -1,
+        "lengthMenu": [ [10, 25, 50,100, -1], [10, 25, 50,100, "All"] ],
+        "language": {
+            "search": "",
+            "lengthMenu": "_MENU_",
+            "info": "_START_-_END_ of _TOTAL_",
+            "infoEmpty": "",
+        },
+    });
+
+    $(document).ready(function() {
+        $('#table').DataTable();
+    });
+</script>
+%#EOF
+

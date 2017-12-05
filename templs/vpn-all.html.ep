@@ -1,0 +1,99 @@
+%#
+%# $Id$
+%#
+% layout 'default';
+% title 'VPN Sw';
+
+% use Mojo::Util qw(dumper);
+
+<div class="button" id="start">Start All</div>
+<div class="button" id="stop">Stop All</div>
+
+<div id="log" class="callout"></div>
+
+% my $confdir = $self->app->config('confdir');
+% my $vpn = $self->app->vpn;
+% my $conf_list = $vpn->conf_list($confdir);
+
+% my $str;
+% my $count = 0;
+
+% foreach my $conffile (sort @{$conf_list}) {
+    % my $name = $vpn->conf_basename($conffile);
+    % $str = $str.", '$name'";
+    % $count += 1;
+% }
+% $str =~ s/^,//;
+
+<script>
+
+function start_all() {
+    var int = 1100;
+    var count = <%== $count %>;
+
+    $("#log").empty();
+    function doSetTimeout(n, service) {
+        setTimeout(function() {
+            let num = n + 1;
+
+            $("#log").append(num + '/' + count + ": Start service  " + service + " ... ");
+            $.ajax({
+                dataType: 'json',
+                url: '/j/vpn/start?service=' + service,
+                success: function(data) {
+                    $("#log").append(data.status + '<br/>');
+                }
+            });
+
+        },
+        n * int + int/2 + 100);
+    }
+
+    var list = [ <%== $str %>];
+
+    for (var i = 0; i < list.length; i++) {
+        doSetTimeout(i, list[i]);
+    }
+}
+
+function stop_all() {
+    var int = 1100;
+    var count = <%== $count %>;
+
+    $("#log").empty();
+    function doSetTimeout(n, service) {
+        setTimeout(function() {
+            let num = n + 1;
+
+            $("#log").append(num + '/' + count + ": Stop service  " + service + " ... ");
+            $.ajax({
+                dataType: 'json',
+                url: '/j/vpn/stop?service=' + service,
+                success: function(data) {
+                    $("#log").append(data.status + '<br/>');
+                }
+            });
+
+        },
+        n * int + int/2 + 100);
+    }
+
+    var list = [ <%== $str %>];
+
+    for (var i = 0; i < list.length; i++) {
+        doSetTimeout(i, list[i]);
+    }
+}
+
+$("#start").click(function() {
+    start_all();
+});
+
+$("#stop").click(function() {
+    stop_all();
+});
+
+</script>
+
+%#EOF
+

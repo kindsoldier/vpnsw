@@ -1,0 +1,12 @@
+[Unit]
+Description=vpnsw
+
+[Service]
+Type=forking
+PIDFile=@APP_RUNDIR@/vpnsw.pid
+ExecStart=@prefix@/sbin/vpnsw
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
