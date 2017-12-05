@@ -339,10 +339,11 @@ sub ucheck {
     return undef unless $username;
     my $pwdfile = $self->pwfile or return undef;
     my $res = undef;
-#    eval {
+    eval {
         my $ht = Apache::Htpasswd->new({ passwdFile => $pwdfile, ReadOnly => 1 });
         $res = $ht->htCheckPassword($username, $password);
-#    };
+    };
+    $self->app->log->info("ucheck: $@") if $@;
     $res;
 }
 
