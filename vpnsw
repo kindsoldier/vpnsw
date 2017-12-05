@@ -458,7 +458,7 @@ $app->config(listenport => '1007');
 $app->config(user => $user || 'root');
 $app->config(group => $group || 'wheel');
 
-$app->config(confdir => "/usr/local/etc/openvpn");
+$app->config(confdir => "/etc/openvpn");
 
 if (-r $app->config('conffile')) {
     $app->log->debug("Load configuration from ".$app->config('conffile'));
@@ -499,7 +499,7 @@ $r->add_condition(
     }
 );
 
-$r->any('/login')->over('auth')->to('controller#login');
+$r->any('/login')->to('controller#login');
 $r->any('/logout')->over('auth')->to('controller#logout');
 
 $r->any('/')->over('auth')->to('controller#index' );

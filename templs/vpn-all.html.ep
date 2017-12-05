@@ -9,6 +9,12 @@
 <div class="button" id="start">Start All</div>
 <div class="button" id="stop">Stop All</div>
 
+<p>
+Please, don't close the page until all proceses are completed<br/>
+Будь ласка, не закривайте сторінку до завершення всіх процесів.<br/>
+すべてのプロセスが完了するまでページを閉じないでください<br/>
+</p>
+
 <div id="log" class="callout"></div>
 
 % my $confdir = $self->app->config('confdir');
@@ -85,11 +91,11 @@ function stop_all() {
     }
 }
 
-$("#start").click(function() {
+$("#start").dblclick(function() {
     start_all();
 });
 
-$("#stop").click(function() {
+$("#stop").dblclick(function() {
     stop_all();
 });
 

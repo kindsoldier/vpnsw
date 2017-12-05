@@ -208,7 +208,7 @@ total ws:<%= $total_ws %>
     <script>
         var status_<%= $name %> = "<%= $status %>";
 
-        $("#status_<%= $name %>").click(function() {
+        $("#status_<%= $name %>").dblclick(function() {
             if (status_<%= $name %> == 'down') {
                 $.ajax({
                     dataType: 'json',
