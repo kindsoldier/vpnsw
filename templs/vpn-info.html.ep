@@ -13,7 +13,7 @@
 % my $vpn = $self->app->vpn;
 
 <div class="text-center">
-    <h5>network summary <a href="/vpn/info"><i class="fi-refresh""></i></a></h5>
+    <h5>Network details <a href="/vpn/info"><i class="fi-refresh""></i></a></h5>
 </div>
 
 % my $conf_list = $vpn->conf_list($confdir);

@@ -20,7 +20,7 @@
 % $vpn->service_stop($service) if ($request eq 'stop' && defined $service);
 
 <div class="text-center">
-    <h5>vpn services <a href="/vpn/list"><i class="fi-refresh"></i></a></h5>
+    <h5>VPN services <a href="/vpn/list"><i class="fi-refresh"></i></a></h5>
 </div> 
 
 % my $conf_list = $vpn->conf_list($confdir);
