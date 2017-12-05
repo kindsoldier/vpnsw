@@ -48,6 +48,10 @@ function start_all() {
                 url: '/j/vpn/start?service=' + service,
                 success: function(data) {
                     $("#log").append(data.status + '<br/>');
+                    $('html,body').animate({
+                                scrollTop: document.body.scrollHeight},
+                                "slow"
+                    );
                 }
             });
 
@@ -77,6 +81,10 @@ function stop_all() {
                 url: '/j/vpn/stop?service=' + service,
                 success: function(data) {
                     $("#log").append(data.status + '<br/>');
+                    $('html,body').animate({
+                                scrollTop: document.body.scrollHeight},
+                                "slow"
+                    );
                 }
             });
 
