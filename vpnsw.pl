@@ -339,10 +339,10 @@ sub ucheck {
     return undef unless $username;
     my $pwdfile = $self->pwfile or return undef;
     my $res = undef;
-    eval {
+#    eval {
         my $ht = Apache::Htpasswd->new({ passwdFile => $pwdfile, ReadOnly => 1 });
         $res = $ht->htCheckPassword($username, $password);
-    };
+#    };
     $res;
 }
 
@@ -500,7 +500,7 @@ $r->add_condition(
 );
 
 $r->any('/login')->to('controller#login');
-$r->any('/logout')->over('auth')->to('controller#logout');
+$r->any('/logout')->to('controller#logout');
 
 $r->any('/')->over('auth')->to('controller#index' );
 $r->any('/hello')->over('auth')->to('controller#hello');

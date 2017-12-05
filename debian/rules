@@ -3,12 +3,12 @@
 %:
 #	dh $@ --with autoreconf 
 	dh $@
-#	./configure --prefix=/usr  --with-confdir=/etc/recvi
+#	./configure --prefix=/usr  --with-confdir=/etc/vpnsw
 #	dh_build
 #	dh_install
 #	dh_auto_clean
 
 override_dh_auto_configure:
-	./configure --prefix=/usr --with-confdir=/etc/recvi
+	./configure --prefix=/usr --with-confdir=/etc/vpnsw
 
 #EOF

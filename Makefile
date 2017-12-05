@@ -87,8 +87,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-unknown-freebsd11.1
-host_triplet = x86_64-unknown-freebsd11.1
+build_triplet = i686-pc-linux-gnu
+host_triplet = i686-pc-linux-gnu
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -179,21 +179,21 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /home/ziggi/pmm2/mojoapps/vpnsw/0.03/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/ziggi/vpnsw/0.03/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-APP_CONFDIR = /usr/local/etc/vpnsw
-APP_GROUP = wheel
-APP_LIBDIR = /usr/local/share/vpnsw
+APP_CONFDIR = /etc/vpnsw
+APP_GROUP = root
+APP_LIBDIR = /usr/share/vpnsw
 APP_LOGDIR = /var/log/vpnsw
 APP_RUNDIR = /var/run/vpnsw
 APP_USER = root
-AUTOCONF = ${SHELL} /home/ziggi/pmm2/mojoapps/vpnsw/0.03/missing autoconf
-AUTOHEADER = ${SHELL} /home/ziggi/pmm2/mojoapps/vpnsw/0.03/missing autoheader
-AUTOMAKE = ${SHELL} /home/ziggi/pmm2/mojoapps/vpnsw/0.03/missing automake-1.15
+AUTOCONF = ${SHELL} /home/ziggi/vpnsw/0.03/missing autoconf
+AUTOHEADER = ${SHELL} /home/ziggi/vpnsw/0.03/missing autoheader
+AUTOMAKE = ${SHELL} /home/ziggi/vpnsw/0.03/missing automake-1.15
 AWK = gawk
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"vpnsw.pl\" -DPACKAGE_TARNAME=\"vpnsw-pl\" -DPACKAGE_VERSION=\"0.03\" -DPACKAGE_STRING=\"vpnsw.pl\ 0.03\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"vpnsw-pl\" -DVERSION=\"0.03\" -DAPP_CONFDIR=\"/usr/local/etc/vpnsw\" -DAPP_LOGDIR=\"/var/log/vpnsw\" -DAPP_RUNDIR=\"/var/run/vpnsw\" -DAPP_USER=\"root\" -DAPP_GROUP=\"wheel\" -DAPP_LIBDIR=/usr/local/share/vpnsw
+DEFS = -DPACKAGE_NAME=\"vpnsw.pl\" -DPACKAGE_TARNAME=\"vpnsw-pl\" -DPACKAGE_VERSION=\"0.03\" -DPACKAGE_STRING=\"vpnsw.pl\ 0.03\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"vpnsw-pl\" -DVERSION=\"0.03\" -DAPP_CONFDIR=\"/etc/vpnsw\" -DAPP_LOGDIR=\"/var/log/vpnsw\" -DAPP_RUNDIR=\"/var/run/vpnsw\" -DAPP_USER=\"root\" -DAPP_GROUP=\"root\" -DAPP_LIBDIR=/usr/share/vpnsw
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
@@ -206,8 +206,8 @@ INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/ziggi/pmm2/mojoapps/vpnsw/0.03/missing makeinfo
-MKDIR_P = /usr/local/bin/gmkdir -p
+MAKEINFO = ${SHELL} /home/ziggi/vpnsw/0.03/missing makeinfo
+MKDIR_P = /bin/mkdir -p
 PACKAGE = vpnsw
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = vpnsw.pl
@@ -216,40 +216,40 @@ PACKAGE_TARNAME = vpnsw-pl
 PACKAGE_URL = 
 PACKAGE_VERSION = 0.03
 PATH_SEPARATOR = :
-PERL = /usr/local/bin/perl
-ROOT_GROUP = wheel
+PERL = /usr/bin/perl
+ROOT_GROUP = root
 SET_MAKE = 
-SHELL = /bin/sh
+SHELL = /bin/bash
 STRIP = 
 VERSION = 0.03
-abs_builddir = /home/ziggi/pmm2/mojoapps/vpnsw/0.03
-abs_srcdir = /home/ziggi/pmm2/mojoapps/vpnsw/0.03
-abs_top_builddir = /home/ziggi/pmm2/mojoapps/vpnsw/0.03
-abs_top_srcdir = /home/ziggi/pmm2/mojoapps/vpnsw/0.03
+abs_builddir = /home/ziggi/vpnsw/0.03
+abs_srcdir = /home/ziggi/vpnsw/0.03
+abs_top_builddir = /home/ziggi/vpnsw/0.03
+abs_top_srcdir = /home/ziggi/vpnsw/0.03
 am__leading_dot = .
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-unknown-freebsd11.1
+build = i686-pc-linux-gnu
 build_alias = 
-build_cpu = x86_64
-build_os = freebsd11.1
-build_vendor = unknown
+build_cpu = i686
+build_os = linux-gnu
+build_vendor = pc
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = x86_64-unknown-freebsd11.1
+host = i686-pc-linux-gnu
 host_alias = 
-host_cpu = x86_64
-host_os = freebsd11.1
-host_vendor = unknown
+host_cpu = i686
+host_os = linux-gnu
+host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/ziggi/pmm2/mojoapps/vpnsw/0.03/install-sh
+install_sh = ${SHELL} /home/ziggi/vpnsw/0.03/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -258,13 +258,13 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /usr/local
+prefix = /usr
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-sysconfdir = ${prefix}/etc
+sysconfdir = /etc
 target_alias = 
 top_build_prefix = 
 top_builddir = .
@@ -277,14 +277,14 @@ AUTOMAKE_OPTIONS = foreign no-dependencies no-installinfo
 EXTRA_DIST = \
 	LICENSE
 
-etcdir = ${prefix}/etc
-#etcdir = ${prefix}/etc
-nobase_etc_SCRIPTS = rc.d/vpnsw
-#nobase_etc_SCRIPTS = init.d/vpnsw
-##systemddir = /lib/systemd/system
-##nobase_systemd_DATA = vpnsw.service
+#etcdir = /etc
+etcdir = /etc
+#nobase_etc_SCRIPTS = rc.d/vpnsw
+nobase_etc_SCRIPTS = init.d/vpnsw
+systemddir = /lib/systemd/system
+nobase_systemd_DATA = vpnsw.service
 sbin_SCRIPTS = vpnsw
-confdir = /usr/local/etc/vpnsw
+confdir = /etc/vpnsw
 dist_conf_DATA = \
 	vpnsw.pw.example \
 	vpnsw.crt.example \
@@ -827,8 +827,8 @@ uninstall-am: uninstall-dist_confDATA \
 
 
 install-data-hook:
-	chmod a+x $(DESTDIR)/${sysconfdir}/rc.d/vpnsw
-#	chmod a+x $(DESTDIR)/${sysconfdir}/init.d/vpnsw
+#	chmod a+x $(DESTDIR)/${sysconfdir}/rc.d/vpnsw
+	chmod a+x $(DESTDIR)/${sysconfdir}/init.d/vpnsw
 	$(INSTALL) -d -m 750 -o $(APP_USER) -g $(APP_GROUP) $(DESTDIR)$(APP_LOGDIR)
 	$(INSTALL) -d -m 750 -o $(APP_USER) -g $(APP_GROUP) $(DESTDIR)$(APP_RUNDIR)
 	for data in $(nobase_conf_DATA);do \

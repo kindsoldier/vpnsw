@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 
 #------------
 #--- CRON ---
@@ -339,10 +339,10 @@ sub ucheck {
     return undef unless $username;
     my $pwdfile = $self->pwfile or return undef;
     my $res = undef;
-    eval {
+#    eval {
         my $ht = Apache::Htpasswd->new({ passwdFile => $pwdfile, ReadOnly => 1 });
         $res = $ht->htCheckPassword($username, $password);
-    };
+#    };
     $res;
 }
 
@@ -440,23 +440,23 @@ my $app = $server->build_app('VPNsw');
 $app = $app->controller_class('VPNsw::Controller');
 
 $app->secrets(['6d578e43ba88260e0375a1a35fd7954b']);
-$app->static->paths(['/usr/local/share/vpnsw/public']);
-$app->renderer->paths(['/usr/local/share/vpnsw/templs']);
+$app->static->paths(['/usr/share/vpnsw/public']);
+$app->renderer->paths(['/usr/share/vpnsw/templs']);
 
-$app->config(conffile => $conffile || '/usr/local/etc/vpnsw/vpnsw.conf');
-$app->config(pwdfile => '/usr/local/etc/vpnsw/vpnsw.pw');
+$app->config(conffile => $conffile || '/etc/vpnsw/vpnsw.conf');
+$app->config(pwdfile => '/etc/vpnsw/vpnsw.pw');
 $app->config(logfile => '/var/log/vpnsw/vpnsw.log');
 $app->config(loglevel => 'info');
 $app->config(pidfile => '/var/run/vpnsw/vpnsw.pid');
-$app->config(crtfile => '/usr/local/etc/vpnsw/vpnsw.crt');
-$app->config(keyfile => '/usr/local/etc/vpnsw/vpnsw.key');
+$app->config(crtfile => '/etc/vpnsw/vpnsw.crt');
+$app->config(keyfile => '/etc/vpnsw/vpnsw.key');
 
 $app->config(listenaddr4 => '0.0.0.0');
 #$app->config(listenaddr6 => '[::]');
 $app->config(listenport => '1007');
 
 $app->config(user => $user || 'root');
-$app->config(group => $group || 'wheel');
+$app->config(group => $group || 'root');
 
 $app->config(confdir => "/etc/openvpn");
 
@@ -500,7 +500,7 @@ $r->add_condition(
 );
 
 $r->any('/login')->to('controller#login');
-$r->any('/logout')->over('auth')->to('controller#logout');
+$r->any('/logout')->to('controller#logout');
 
 $r->any('/')->over('auth')->to('controller#index' );
 $r->any('/hello')->over('auth')->to('controller#hello');
