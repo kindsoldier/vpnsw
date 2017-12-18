@@ -4,7 +4,7 @@
 AUTOMAKE_OPTIONS = foreign no-dependencies no-installinfo
 
 EXTRA_DIST = \
-	LICENSE
+	LICENSE README README.md
 
 install-data-hook:
 if FREEBSD_OS

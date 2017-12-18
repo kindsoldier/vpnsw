@@ -264,7 +264,7 @@ top_srcdir = @top_srcdir@
 #
 AUTOMAKE_OPTIONS = foreign no-dependencies no-installinfo
 EXTRA_DIST = \
-	LICENSE
+	LICENSE README README.md
 
 @FREEBSD_OS_TRUE@etcdir = @sysconfdir@
 @LINUX_OS_TRUE@etcdir = @sysconfdir@
