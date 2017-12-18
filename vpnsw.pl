@@ -67,6 +67,7 @@ use warnings;
 use Mojo::Util qw(dumper);
 use File::Basename qw(basename dirname);
 use POSIX;
+use Config;
 
 sub new {
     my ($class, $app) = @_;
@@ -183,16 +184,16 @@ sub system_comm {
 sub service_status {
     my ($self, $name) = @_;
     return undef unless $name;
-#    my $out = qx(service openvpn status $name 2>&1);
-#    my $out = $self->system_comm("sudo service openvpn status $name 2>&1") || '';
-    my $out = $self->system_comm("sudo systemctl status openvpn\@$name 2>&1") || '';
-#    $self->app->log->info("service_status: Status service $name");
-#    return 'up' if $out =~ m/is running/;
-#    return 'down' if $out =~ m/is not running/;
-
-    return 'up' if $out =~ m/Active: active/;
-    return 'down' if $out =~ m/Active: inactive/;
-
+    $osname = $Config{osname};
+    if ($osname =~ /bsd/) {
+        my $out = $self->system_comm("sudo service openvpn status $name 2>&1") || '';
+        return 'up' if $out =~ m/is running/;
+        return 'down' if $out =~ m/is not running/;
+    } else {
+        my $out = $self->system_comm("sudo systemctl status openvpn\@$name 2>&1") || '';
+        return 'up' if $out =~ m/Active: active/;
+        return 'down' if $out =~ m/Active: inactive/;
+    }
     return undef;
 }
 
@@ -200,9 +201,13 @@ sub service_status {
 sub service_start {
     my ($self, $name) = @_;
     return undef unless $name;
-#    my $out = qx(service openvpn start $name 2>&1);
-#    my $out = $self->system_comm("sudo service openvpn start $name 2>&1") || '';
-    my $out = $self->system_comm("sudo systemctl start openvpn\@$name 2>&1") || '';
+    $osname = $Config{osname};
+    my $out;
+    if ($osname =~ /bsd/) {
+        $out = $self->system_comm("sudo service openvpn start $name 2>&1") || '';
+    } else {
+        $out = $self->system_comm("sudo systemctl start openvpn\@$name 2>&1") || '';
+    }
     $self->app->log->info("service_start: Start service $name with result $out");
     my $s = $self->service_status($name) || '';
     return 1 if $s eq 'up';
@@ -212,9 +217,14 @@ sub service_start {
 sub service_stop {
     my ($self, $name) = @_;
     return undef unless $name;
-#    my $out = qx(service openvpn stop $name 2>&1);
-    my $out = $self->system_comm("sudo systemctl stop openvpn\@$name 2>&1") || '';
-    $self->app->log->info("service_stop: Stop service $name with result $out");
+    $osname = $Config{osname};
+    my $out;
+    if ($osname =~ /bsd/) {
+        $out = $self->system_comm("sudo service openvpn stop $name 2>&1") || '';
+    } else {
+        $out = $self->system_comm("sudo systemctl stop openvpn\@$name 2>&1") || '';
+    }
+    $self->app->log->info("service_start: Stop service $name with result $out");
     my $s = $self->service_status($name) || '';
     return 1 if $s eq 'down';
     return undef;
@@ -639,4 +649,5 @@ $server->on(
 );
 
 $server->run;
+
 #EOF
