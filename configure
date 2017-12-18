@@ -592,8 +592,6 @@ APP_LOGDIR
 APP_CONFDIR
 SYSTEMD_FALSE
 SYSTEMD_TRUE
-FOR_LINUX
-FOR_FREEBSD
 LINUX_OS_FALSE
 LINUX_OS_TRUE
 FREEBSD_OS_FALSE
@@ -2540,14 +2538,6 @@ fi
 
 	OSNAME=freebsd
 	ROOT_GROUP=wheel
-	cat >>confdefs.h <<_ACEOF
-#define FOR_FREEBSD " "
-_ACEOF
-
-	cat >>confdefs.h <<_ACEOF
-#define FOR_LINUX "AAA"
-_ACEOF
-
         ;;
     *linux* )
 	ROOT_GROUP="root"
@@ -2570,10 +2560,6 @@ fi
 
 	OSNAME=linux
 	ROOT_GROUP=root
-	FOR_FREEBSD="AAA"
-
-	FOR_LINUX=" "
-
         ;;
 esac
 
