@@ -1,6 +1,7 @@
 %#
 %# $Id$
 %#
+%#  -*- mode: perl;-*-
 % layout 'default';
 % title 'VPN Sw';
 % use Mojo::Util qw(dumper);
