@@ -189,7 +189,7 @@ sub system_comm {
 sub service_status {
     my ($self, $name) = @_;
     return undef unless $name;
-    $osname = $Config{osname};
+    my $osname = $Config{osname};
     if ($osname =~ /bsd/) {
         my $out = $self->system_comm("sudo service openvpn status $name 2>&1") || '';
         return 'up' if $out =~ m/is running/;
@@ -206,7 +206,7 @@ sub service_status {
 sub service_start {
     my ($self, $name) = @_;
     return undef unless $name;
-    $osname = $Config{osname};
+    my $osname = $Config{osname};
     my $out;
     if ($osname =~ /bsd/) {
         $out = $self->system_comm("sudo service openvpn start $name 2>&1") || '';
@@ -222,7 +222,7 @@ sub service_start {
 sub service_stop {
     my ($self, $name) = @_;
     return undef unless $name;
-    $osname = $Config{osname};
+    my $osname = $Config{osname};
     my $out;
     if ($osname =~ /bsd/) {
         $out = $self->system_comm("sudo service openvpn stop $name 2>&1") || '';
