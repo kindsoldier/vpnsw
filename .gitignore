@@ -1,0 +1,8 @@
+*~
+Makefile
+config.log
+config.status
+init.d/vpnsw
+rc.d/vpnsw
+vpnsw
+vpnsw.service
