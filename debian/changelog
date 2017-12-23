@@ -1,5 +1,5 @@
-vpnsw (0.04-1) unstable; urgency=low
+vpnsw (0.06-1) unstable; urgency=low
 
-  * Initial release.
+  *  Release.
 
  -- Oleg Borodin <borodin@unix7.org>  Fri, 20 Feb 1998 12:50:05 -0500

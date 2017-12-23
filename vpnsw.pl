@@ -546,16 +546,16 @@ $tls .= '&key='.$app->config('keyfile');
 
 my $listen4;
 if ($app->config('listenaddr4')) {
-    $listen4 = "http://";
+    $listen4 = "https://";
     $listen4 .= $app->config('listenaddr4').':'.$app->config('listenport');
-#    $listen4 .= $tls;
+    $listen4 .= $tls;
 }
 
 my $listen6;
 if ($app->config('listenaddr6')) {
-    $listen6 = "http://";
+    $listen6 = "https://";
     $listen6 .= $app->config('listenaddr6').':'.$app->config('listenport');
-#    $listen6 .= $tls;
+    $listen6 .= $tls;
 }
 
 my @listen;
@@ -621,37 +621,37 @@ local $SIG{HUP} = sub {
 };
 
 
-my $sub = Mojo::IOLoop::Subprocess->new;
-$sub->run(
-    sub {
-        my $subproc = shift;
-        my $loop = Mojo::IOLoop->singleton;
-        my $id = $loop->recurring(
-            1200 => sub {
-                my $res = $app->cron->ping;
-                $app->log->info($res);
-            }
-        );
-        $loop->start unless $loop->is_running;
-        1;
-    },
-    sub {
-        my ($subprocess, $err, @results) = @_;
-        $app->log->info('Exit subprocess');
-        1;
-    }
-);
-
-my $pid = $sub->pid;
-$app->log->info("Subrocess $pid start ");
-
-$server->on(
-    finish => sub {
-        my ($prefork, $graceful) = @_;
-        $app->log->info("Subrocess $pid stop");
-        kill('INT', $pid);
-    }
-);
+#my $sub = Mojo::IOLoop::Subprocess->new;
+#$sub->run(
+#    sub {
+#        my $subproc = shift;
+#        my $loop = Mojo::IOLoop->singleton;
+#        my $id = $loop->recurring(
+#            1200 => sub {
+#                my $res = $app->cron->ping;
+#                $app->log->info($res);
+#            }
+#        );
+#        $loop->start unless $loop->is_running;
+#        1;
+#    },
+#    sub {
+#        my ($subprocess, $err, @results) = @_;
+#        $app->log->info('Exit subprocess');
+#        1;
+#    }
+#);
+#
+#my $pid = $sub->pid;
+#$app->log->info("Subrocess $pid start ");
+#
+#$server->on(
+#    finish => sub {
+#        my ($prefork, $graceful) = @_;
+#        $app->log->info("Subrocess $pid stop");
+#        kill('INT', $pid);
+#    }
+#);
 
 $server->run;
 

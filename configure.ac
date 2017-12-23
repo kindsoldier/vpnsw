@@ -1,4 +1,4 @@
-AC_INIT(vpnsw.pl,0.04)
+AC_INIT(vpnsw.pl,0.06)
 AM_INIT_AUTOMAKE
 AC_PREFIX_DEFAULT(/usr/local)
 
