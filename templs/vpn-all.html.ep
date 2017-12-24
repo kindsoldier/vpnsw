@@ -101,12 +101,42 @@ function stop_all() {
     }
 }
 
-$("#start").dblclick(function() {
-    start_all();
+%#$("#start").dblclick(function() {
+%#    start_all();
+%#});
+
+%#$("#stop").dblclick(function() {
+%#    stop_all();
+%#});
+
+var touchtime_start = 0;
+
+$("#start").on("click", function() {
+    if (touchtime_start == 0) {
+        touchtime_start = new Date().getTime();
+    } else {
+        if (((new Date().getTime()) - touchtime_start) < 1200) {
+            start_all();
+            touchtime_start = 0;
+        } else {
+            touchtime_start = new Date().getTime();
+        }
+    }
 });
 
-$("#stop").dblclick(function() {
-    stop_all();
+var touchtime_stop = 0;
+
+$("#stop").on("click", function() {
+    if (touchtime_stop == 0) {
+        touchtime_stop = new Date().getTime();
+    } else {
+        if (((new Date().getTime()) - touchtime_stop) < 1200) {
+            stop_all();
+            touchtime_stop = 0;
+        } else {
+            touchtime_stop = new Date().getTime();
+        }
+    }
 });
 
 </script>

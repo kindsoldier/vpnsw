@@ -209,31 +209,70 @@ total ws:<%= $total_ws %>
     <script>
         var status_<%= $name %> = "<%= $status %>";
 
-        $("#status_<%= $name %>").dblclick(function() {
-            if (status_<%= $name %> == 'down') {
-                $.ajax({
-                    dataType: 'json',
-                    url: '/j/vpn/start?service=<%= $name %>',
-                    success: function(data) {
-                        if (data.status == 'up') {
-                            $("#status_<%= $name %>").html('up <i class="fi-play"></i>');
-                            status_<%= $name %> = 'up';
-                        }
-                    }
-                });
+%#        $("#status_<%= $name %>").dblclick(function() {
+%#            if (status_<%= $name %> == 'down') {
+%#                $.ajax({
+%#                    dataType: 'json',
+%#                    url: '/j/vpn/start?service=<%= $name %>',
+%#                    success: function(data) {
+%#                        if (data.status == 'up') {
+%#                            $("#status_<%= $name %>").html('up <i class="fi-play"></i>');
+%#                            status_<%= $name %> = 'up';
+%#                        }
+%#                    }
+%#                });
+%#            } else {
+%#                $.ajax({
+%#                    dataType: 'json',
+%#                    url: '/j/vpn/stop?service=<%= $name %>',
+%#                    success: function(data) {
+%#                        if (data.status == 'down') {
+%#                            $("#status_<%= $name %>").html('down <i class="fi-x"></i>');
+%#                            status_<%= $name %> = 'down';
+%#                        }
+%#                    }
+%#                });
+%#            }
+%#        });
+
+        var touchtime_<%= $name %> = 0;
+
+        $("#status_<%= $name %>").on("click", function() {
+            if (touchtime_<%= $name %> == 0) {
+                touchtime_<%= $name %> = new Date().getTime();
             } else {
-                $.ajax({
-                    dataType: 'json',
-                    url: '/j/vpn/stop?service=<%= $name %>',
-                    success: function(data) {
-                        if (data.status == 'down') {
-                            $("#status_<%= $name %>").html('down <i class="fi-x"></i>');
-                            status_<%= $name %> = 'down';
-                        }
+                if (((new Date().getTime()) - touchtime_<%= $name %>) < 1200) {
+                    if (status_<%= $name %> == 'down') {
+                        $.ajax({
+                            dataType: 'json',
+                            url: '/j/vpn/start?service=<%= $name %>',
+                            success: function(data) {
+                                if (data.status == 'up') {
+                                    $("#status_<%= $name %>").html('up <i class="fi-play"></i>');
+                                    status_<%= $name %> = 'up';
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            dataType: 'json',
+                            url: '/j/vpn/stop?service=<%= $name %>',
+                            success: function(data) {
+                                if (data.status == 'down') {
+                                    $("#status_<%= $name %>").html('down <i class="fi-x"></i>');
+                                    status_<%= $name %> = 'down';
+                                }
+                            }
+                        });
                     }
-                });
+                    touchtime_<%= $name %> = 0;
+
+                } else {
+                    touchtime_<%= $name %> = new Date().getTime();
+                }
             }
         });
+
     </script>
 % }
 
